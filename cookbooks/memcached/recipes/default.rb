@@ -1,9 +1,8 @@
 #
-# Cookbook Name:: ntp
+# Cookbook Name:: memcached
 # Recipe:: default
-# Author:: Joshua Timberman (<joshua@opscode.com>)
 #
-# Copyright 2009, Opscode, Inc
+# Copyright 2009, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,26 +15,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-case node[:platform] 
-when "ubuntu","debian"
-  package "ntpdate" do
-    action :install
-  end
+package "memcached" do
+  action :upgrade
 end
 
-package "ntp" do
-  action :install
+package "libmemcache-dev" do
+  action :upgrade
 end
 
-service node[:ntp][:service] do
-  action :start
-end
-
-template "/etc/ntp.conf" do
-  source "ntp.conf.erb"
-  owner "root"
-  group "root"
-  mode 0644
-  notifies :restart, resources(:service => node[:ntp][:service])
+service "memcached" do
+  action :disable
 end

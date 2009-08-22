@@ -16,12 +16,9 @@ node[:packages].each do |p|
   package p
 end
 
-include_recipe "mysql::client"
-include_recipe "mysql::server"
-
-include_recipe "ntp"
-
-include_recipe "apache2"
+%w(mysql::client mysql::server ntp apache2 memcached).each do |recipe|
+  include_recipe recipe
+end
 
 remote_file "/etc/sudoers" do
   source "sudoers"

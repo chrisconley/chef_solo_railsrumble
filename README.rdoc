@@ -3,6 +3,7 @@
 This repository is used to quickly build an Ubuntu Rails Linode VPS for RailsRumble via Chef Solo.
 Includes:
   Mysql 5
+  Memcached
   Apache2 +Passenger
   Nginx +Passenger
 
