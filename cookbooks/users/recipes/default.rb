@@ -1,17 +1,18 @@
 node[:users].each do |user|
-  homedir = user[:homedir].last
+  homedir = user[:homedir]
+  shell   = user[:shell] || "/bin/zsh"
+
   ##
   # Create user.
   user user[:username] do
     comment user[:username]
     home homedir
-    shell user[:shell]
+    shell shell
   end
 
   ##
   # Create skel homedir.
-  user[:homedir] << "#{homedir}/.ssh"
-  user[:homedir].each do |dir|
+  (user[:homedir].to_a << "#{homedir}/.ssh").each do |dir|
     directory dir do
       recursive true
       owner user[:username]
@@ -22,7 +23,7 @@ node[:users].each do |user|
 
   ##
   # Run user specific recipes.
-  include_recipe "users::#{user[:username]}"
+  include_recipe "users::#{user[:username]}" if File.exists?(File.join(File.dirname(__FILE__), "#{user[:username]}.rb"))
 
   remote_file "#{homedir}/.ssh/authorized_keys" do
     source "#{user[:username]}_id_rsa.pub"
@@ -31,9 +32,13 @@ node[:users].each do |user|
     group user[:username]
   end
 
-  remote_file "#{homedir}/.zshrc" do
-    source "zshrc"
-    mode 0400
+  ##
+  # Setup shell and rc files.
+  remote = user[:skel] ? "#{shell.split(/\//)[-1]}rc" : "zshrc"
+  source = user[:skel] || "zshrc"
+  remote_file "#{homedir}/.#{remote}" do
+    source source
+    mode 0644
     owner user[:username]
     group user[:username]
   end
