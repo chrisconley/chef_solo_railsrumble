@@ -10,7 +10,7 @@
     },
     {
       "name":"passenger",
-      "version": "2.2.4"
+      "version": "2.2.5"
     },
     {
       "name":"mysql",
@@ -20,8 +20,8 @@
   "users":[
     {
       "username":"deploy",
-      "homedir":["/var/www/sites/u/apps"],
-      "shell":"/bin/zsh"
+      "homedir":"/var/www",
+      "skel":"deployrc"
     }
   ],
   "recipes":["packages", "gems", "users"]
