@@ -43,7 +43,7 @@ end
 
 desc "Update an existing node to run the latest Chef configuration"
 task :update => [:sync, :host] do |t|
-  ssh "chef-solo -j /etc/chef/config/dna.json -l debug"
+  ssh "chef-solo -j /etc/chef/config/dna.json -c /etc/chef/config/solo.rb -l debug"
 end
 
 desc "SSH to the machine as root"
